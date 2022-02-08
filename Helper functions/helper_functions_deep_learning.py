@@ -223,6 +223,34 @@ def load_and_prep_image(filename,img_shape=224,scale=True):
         img=img/255.0
     return img
 
+from sklearn.metrics import accuracy_score,precision_recall_fscore_support
+# evaluation metrics for classification
+def binary_clf_evaluation(y_true,y_pred):
+    '''
+    accepts true and predicted labels and calculates accuracy,precision,recall and f1_score
+    '''
+    model_accuracy=accuracy_score(y_true,y_pred)*100
+    
+    model_precision,model_recall,model_f1_score,_=precision_recall_fscore_support(y_true,y_pred,average='weighted')
+    
+    results={'accuracy':model_accuracy,
+             'precision':model_precision,
+             'recall':model_recall,
+             'f1_score':model_f1_score
+            }
+    return results
+
+import pandas as pd
+def store_results(exp_result,exp_name,overall_result=pd.DataFrame()):
+    '''
+    accepts the dictinary containing the various evaluation metrics for a experiment,the 
+    experiment name and overall_result Dataframe and return the overall_result 
+    dataframe after concatinating the results of exp_name
+    '''
+    df=pd.DataFrame(exp_result,index=[exp_name])
+    return pd.concat([overall_result,df],axis=0)
+
+
 
 
 """
